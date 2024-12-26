@@ -5,8 +5,8 @@ import { CiPhone } from "react-icons/ci";
 export default function Footer() {
   return (
     <>
-      <div className="w-full bg-[#4338CA] bottom-0 left-0 absolute ">
-        <div className="m-5 ">
+      <div className="w-full bg-[#4338CA] bottom-0 left-0  static ">
+        <div>
           <div>
             <div className="text-[#FAFAFA] font-bold text-[20px]  flex items-center">
               <MdOutlineLocalMovies />

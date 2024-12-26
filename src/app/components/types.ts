@@ -5,8 +5,17 @@ export type movies = {
   title: string;
   imageBaseUrl: string;
 };
-export type PageProps = {
+export type pageProps = {
+  type: number;
+  page: string;
+  params: any;
+};
+export type props = {
   params: {
-    dynamicPage: string;
+    id: string;
   };
+};
+export type creators = {
+  profession: string;
+  name: string;
 };

@@ -7,13 +7,11 @@ export default async function Home() {
     <div>
       <Header />
       <Poster />
-      <Card type="upcoming" page="1" />
-      <p>Top Rated</p>
-      <Card type="popular" page="1" />
-      <p>Popular</p>
-      <Card type="top_rated" page="1" />
+      <Card type="upcoming" page={1} params />
 
-      <div className="w-[200px] h-[400px]"></div>
+      <Card type="popular" page={1} params />
+
+      <Card type="top_rated" page={1} params />
     </div>
   );
 }
