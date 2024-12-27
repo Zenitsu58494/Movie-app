@@ -1,5 +1,9 @@
 import { props } from "@/app/components/types";
 import Creators from "@/app/components/movieCreators";
+import Link from "next/link";
+import { Card } from "@/app/components/card";
+import { MovieType } from "@/app/components/types";
+import { WiDirectionRight } from "react-icons/wi";
 
 export default async function movie({ params }: props) {
   const options = {
@@ -24,6 +28,14 @@ export default async function movie({ params }: props) {
     return hour + "h" + " " + minute + "m";
   }
   const time = convertMinute(data.runtime);
+  const response = await fetch(
+    `https://api.themoviedb.org/3/movie/${params.id}/recommendations`,
+    options
+  );
+  const resData = await response.json();
+  let movies: any[];
+  movies = resData.results;
+  console.log(movies);
 
   return (
     <>
@@ -79,6 +91,24 @@ export default async function movie({ params }: props) {
             profession="Stars"
             name="Cynthia Erivo ·  Ariana Grande · Jeff Goldblum"
           />
+        </div>
+
+        <div className="flex  items-center justify-between w-[320px] ml-5">
+          <p className="text-[#09090B] text-[24px] font-[600]">
+            More like this
+          </p>
+          <Link href={`/movie/recommend/${params.id}`}>
+            <button className="flex justify-center items-center">
+              See more <WiDirectionRight className="text-[30px]" />{" "}
+            </button>
+          </Link>
+        </div>
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          {movies
+            .map((movie: MovieType) => (
+              <Card key={movie.id} movie={movie} imageBaseUrl={imageBaseUrl} />
+            ))
+            .slice(0, 2)}
         </div>
       </div>
     </>

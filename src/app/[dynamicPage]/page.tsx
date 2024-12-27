@@ -1,22 +1,46 @@
 "use client";
 
+import { useParams, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { MovieType } from "../components/types";
 import { Card } from "../components/card";
-import { useState } from "react";
-import Header from "../components/header";
-import Footer from "../components/footer";
-import { useParams } from "next/navigation";
+import Pagination from "../components/pagination";
 
 export default function Page() {
   const params = useParams();
+  const [movies, setMovies] = useState<any[]>();
+  const searchParams = useSearchParams();
+  const page = searchParams.get("page");
+  const imageBaseUrl = "https://image.tmdb.org/t/p/w500/";
 
+  useEffect(() => {
+    const fetchMovies = async () => {
+      const url = `https://api.themoviedb.org/3/movie/${params.dynamicPage}?language=en-US&page=1${page}`;
+      const options = {
+        method: "GET",
+        headers: {
+          accept: "application/json",
+          Authorization:
+            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmMzk2OTBmOTgzMGNlODA0Yjc4OTRhYzFkZWY0ZjdlOSIsIm5iZiI6MTczNDk0OTM3MS43NDIsInN1YiI6IjY3NjkzOWZiYzdmMTcyMDVkMTBiMGIxMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.2r2TerxSJdZGmGVSLVDkk6nHT0NPqY4rOcxHtMNt0aE",
+        },
+      };
+
+      let movies: MovieType[] = [];
+
+      const res = await fetch(url, options);
+      const data = await res.json();
+      setMovies(data.results);
+    };
+    fetchMovies();
+  }, [params]);
   return (
     <>
-      <div>
-        <Header />
-
-        <Card type={params.dynamicPage} params={params} page={1} />
-        <div className="w-full h-[140px]"></div>
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        {movies?.map((movie: MovieType) => (
+          <Card key={movie.id} movie={movie} imageBaseUrl={imageBaseUrl} />
+        ))}
       </div>
+      <Pagination />
     </>
   );
 }

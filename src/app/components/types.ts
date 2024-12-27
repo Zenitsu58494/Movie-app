@@ -4,10 +4,11 @@ export type movies = {
   vote_average: number;
   title: string;
   imageBaseUrl: string;
+  type: string;
 };
 export type pageProps = {
-  type: number;
-  page: string;
+  type: string;
+  page: number;
   params: any;
 };
 export type props = {
@@ -18,4 +19,14 @@ export type props = {
 export type creators = {
   profession: string;
   name: string;
+};
+export type MovieType = {
+  id: number;
+  title: string;
+  overview: string;
+  release_date: string;
+  poster_path: string | null;
+  backdrop_path: string | null;
+  vote_average: number;
+  vote_count: number;
 };
