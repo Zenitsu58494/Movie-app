@@ -2,20 +2,25 @@
 
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { MovieType } from "../components/types";
+import { MovieType, pageInfo } from "../components/types";
 import { Card } from "../components/card";
 import Pagination from "../components/pagination";
+import { PageInfo } from "next/dist/build/utils";
 
 export default function Page() {
   const params = useParams();
   const [movies, setMovies] = useState<any[]>();
+  const [pageInfo, setPageInfo] = useState<pageInfo>({
+    totalPages: 0,
+    currentPage: 0,
+  });
   const searchParams = useSearchParams();
   const page = searchParams.get("page");
   const imageBaseUrl = "https://image.tmdb.org/t/p/w500/";
 
   useEffect(() => {
     const fetchMovies = async () => {
-      const url = `https://api.themoviedb.org/3/movie/${params.dynamicPage}?language=en-US&page=1${page}`;
+      const url = `https://api.themoviedb.org/3/movie/${params.dynamicPage}?language=en-US&page=1${page};`;
       const options = {
         method: "GET",
         headers: {
@@ -30,6 +35,7 @@ export default function Page() {
       const res = await fetch(url, options);
       const data = await res.json();
       setMovies(data.results);
+      setPageInfo({ currentPage: Number(page), totalPages: data.total_pages });
     };
     fetchMovies();
   }, [params]);
@@ -40,7 +46,7 @@ export default function Page() {
           <Card key={movie.id} movie={movie} imageBaseUrl={imageBaseUrl} />
         ))}
       </div>
-      <Pagination />
+      <Pagination pageInfo={pageInfo} />
     </>
   );
 }

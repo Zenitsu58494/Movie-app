@@ -1,17 +1,18 @@
 import { Slice } from "lucide-react";
 import { movies } from "./types";
-import { pageProps } from "./types";
 
 import Link from "next/link";
 
 export function Card({ type, movie, imageBaseUrl }: any) {
+  let imgPath = movie.poster_path ?? movie.backdrop_path;
+
   return (
     <>
       <div className="p-5 font-[600]">
         <Link href={`/movie/${movie.id}`}>
           <div key={movie.id}>
             <img
-              src={`${imageBaseUrl}${movie.poster_path}`}
+              src={`${imageBaseUrl}${imgPath}`}
               width={160}
               height={240}
             ></img>

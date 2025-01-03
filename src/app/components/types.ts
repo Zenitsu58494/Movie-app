@@ -30,3 +30,11 @@ export type MovieType = {
   vote_average: number;
   vote_count: number;
 };
+export type pageInfo = {
+  currentPage: number;
+  totalPages: number;
+};
+export type genre = {
+  id: number;
+  name: string;
+};

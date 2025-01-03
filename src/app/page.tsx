@@ -6,7 +6,6 @@ import Section from "./components/section";
 export default async function Home() {
   return (
     <div>
-      <Header />
       <Poster />
       <Section type="upcoming" />
       <Section type="popular" />

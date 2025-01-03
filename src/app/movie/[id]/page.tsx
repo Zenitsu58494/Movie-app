@@ -1,4 +1,4 @@
-import { props } from "@/app/components/types";
+import { pageProps, props } from "@/app/components/types";
 import Creators from "@/app/components/movieCreators";
 import Link from "next/link";
 import { Card } from "@/app/components/card";
@@ -36,6 +36,14 @@ export default async function movie({ params }: props) {
   let movies: any[];
   movies = resData.results;
   console.log(movies);
+  let imgPath = data.poster_path ?? data.backdrop_path ?? "";
+
+  const creRes = await fetch(
+    `https://api.themoviedb.org/3/movie/${params.id}/credits`,
+    options
+  );
+  const creData = await creRes.json();
+  console.log(creData);
 
   return (
     <>
@@ -58,38 +66,51 @@ export default async function movie({ params }: props) {
           </div>
         </div>
         <img
-          src={`${imageBaseUrl}${data.poster_path}`}
+          src={`${imageBaseUrl}${imgPath}`}
           className="w-full sm:h-[300px] lg:h-[600px] "
         ></img>
         <div className="flex justify-between p-6 w-[400px]">
           <div>
             <img
-              src={`${imageBaseUrl}${data.poster_path}`}
+              src={`${imageBaseUrl}${imgPath}`}
               width={1000}
               height={180}
             ></img>
           </div>
           <div className="pl-10">
             {genries?.map((genre: any) => (
-              <span className="rounded-full h-5 border-[#E4E4E7] border-[1px] ml-4">
-                {genre.name}
-              </span>
+              <Link href={`/filterByGenre/${genre.id}`}>
+                <span className="rounded-full h-5 border-[#E4E4E7] border-[1px] ml-4">
+                  {genre.name}
+                </span>
+              </Link>
             ))}
 
             <div className="pt-5 ">{data.overview}</div>
           </div>
         </div>
         <div className="p-6  ">
-          <Creators profession="Director" name="Jon jones" />
-
           <Creators
             profession="Writer"
-            name="Winnie Holzman ·  Dana Fox · Gregory Maguire"
+            name={creData.crew
+              .filter((director: any) => director.job === "Writer")
+              .map((credits: any) => (
+                <>{credits.name}, </>
+              ))}
           />
-
+          <Creators
+            profession="Director"
+            name={creData.crew
+              .filter((director: any) => director.job === "Director")
+              .map((credits: any) => (
+                <>{credits.name} </>
+              ))}
+          />
           <Creators
             profession="Stars"
-            name="Cynthia Erivo ·  Ariana Grande · Jeff Goldblum"
+            name={creData.cast
+              .map((credits: any) => <>{credits.name}, </>)
+              .slice(0, 3)}
           />
         </div>
 
